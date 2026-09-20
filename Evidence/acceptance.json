@@ -1,0 +1,25 @@
+{
+    "passed": false,
+    "timestamp": "2026-09-20T12:48:35.2425809+08:00",
+    "checks": [
+        "Reset: idle, zero count, upstream closed, downstream open",
+        "Start button invokes the serialized runtime sequence",
+        "Upstream release advances workpiece on belt",
+        "Pause freezes workpiece, sequence clock and robot TCP",
+        "IR raycast detects the real workpiece collider and gates the sequence",
+        "Vacuum attaches cover B to the moving suction tool",
+        "Cover B seats on A at the alignment datum and remains attached",
+        "Robot targets remain inside the articulated arm reach envelope",
+        "Two complete cycles produce exactly two delivered assemblies",
+        "Robot emergency stop latches and rejects restart until reset",
+        "Conveyor emergency stop freezes the interlocked cell",
+        "Single step completes exactly one operation then pauses",
+        "Test setup reaches a suspended, vacuum-held part",
+        "Reset during pickup clears vacuum, restores parts and returns robot home",
+        "Long-run buffer caps visible finished assemblies at six without count loss",
+        "Closed clamp prevents conveyor movement and raises an interlock fault",
+        "Inspection mode enables the visitor collision capsule"
+    ],
+    "failure": "System.Exception: Visitor capsule collides with conveyor and remains above the workshop floor\r\n  at FactoryAcceptance.Check (System.Boolean condition, System.String description) [0x0001b] in E:\\UnityProjects\\FactoryTwin\\Assets\\FactoryTwin\\Scripts\\FactoryAcceptance.cs:13 \r\n  at FactoryAcceptance.RunChecks () [0x0076f] in E:\\UnityProjects\\FactoryTwin\\Assets\\FactoryTwin\\Scripts\\FactoryAcceptance.cs:69 \r\n  at FactoryAcceptance+<Run>d__4.MoveNext () [0x0004c] in E:\\UnityProjects\\FactoryTwin\\Assets\\FactoryTwin\\Scripts\\FactoryAcceptance.cs:18 ",
+    "measuredCycleSeconds": 20.520090103149415
+}
