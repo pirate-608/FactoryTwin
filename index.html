@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10252c">
+  <title>Factory Twin · 智能装配车间</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#10252c;color:#e6f2f2;font:14px system-ui,"Microsoft YaHei",sans-serif}
+    body{display:flex;flex-direction:column}header{height:44px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 18px;border-bottom:1px solid #35515a;background:#10252c}strong{letter-spacing:.08em;font-size:13px}header span{color:#9cb3bc;font-size:12px}button{margin-left:auto;border:1px solid #46636c;border-radius:4px;background:#203c45;color:#e6f2f2;padding:5px 14px;cursor:pointer}button:focus-visible{outline:2px solid #1cdfb4}button:disabled{opacity:.4;cursor:wait}
+    main{position:relative;flex:1;min-height:0}canvas{display:block;width:100%;height:100%;background:#10252c;outline:none}
+    #loading{position:absolute;inset:0;display:grid;place-content:center;background:radial-gradient(ellipse at center,#234650,#10252c 75%);text-align:center}#loading h1{font-size:32px;font-weight:500;letter-spacing:.12em;margin:0 0 12px}#loading p{color:#a8c3ca}progress{width:min(340px,80vw);height:6px;border:0;accent-color:#1cdfb4;margin:16px auto}#progress-text{font-variant-numeric:tabular-nums}
+    #notice{display:none;position:absolute;top:20px;left:50%;transform:translateX(-50%);max-width:760px;width:85%;padding:16px;background:#653125;border:1px solid #ed9077;white-space:pre-wrap;overflow-wrap:anywhere}footer{height:28px;flex-shrink:0;padding:5px 18px;color:#9cb3bc;font-size:11px;display:flex;justify-content:space-between;background:#10252c}@media(max-width:700px){header span{display:none}footer{height:auto;min-height:28px;gap:12px;font-size:10px}#loading h1{font-size:24px}}
+  </style>
+</head>
+<body>
+  <header><strong>ROBOTLAB / FACTORY TWIN</strong><span>智能装配车间 · 交互仿真</span><button id="fullscreen" disabled>全屏</button></header>
+  <main id="player">
+    <canvas id="unity-canvas" width="1600" height="900" tabindex="0" aria-label="智能装配车间，点击画面后使用空格启动，R 复位，F 巡视"></canvas>
+    <div id="loading"><h1>智能装配车间</h1><p>单件上料 / 红外识别 / 机器人装配</p><progress id="progress" max="1" value="0"></progress><p id="progress-text" role="status">正在加载场景 0%</p></div>
+    <div id="notice" role="alert"></div>
+  </main>
+  <footer><span>Space 启停 · R 复位 · 1–5 视角 · F 巡视 · WASD 移动 · 按住右键环顾 · H 隐藏界面</span><span id="state">加载中</span></footer>
+  <script>
+    const canvas=document.getElementById('unity-canvas');
+    const state=document.getElementById('state');
+    function showBanner(message,type){
+      if(type!=='error'){console.warn(message);return;}
+      document.getElementById('notice').textContent=message;
+      document.getElementById('notice').style.display='block';state.textContent='加载失败';
+    }
+    canvas.addEventListener('contextmenu',event=>event.preventDefault());
+    canvas.addEventListener('pointerdown',()=>canvas.focus());
+    canvas.addEventListener('keydown',event=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.code))event.preventDefault();});
+    const config={
+      dataUrl:'Build/WebGL.data.unityweb',
+      frameworkUrl:'Build/WebGL.framework.js.unityweb',
+      codeUrl:'Build/WebGL.wasm.unityweb',
+      streamingAssetsUrl:'StreamingAssets',
+      companyName:"RobotLab",
+      productName:"Factory Twin — Assembly Workshop",
+      productVersion:"1.0",
+      devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),
+      showBanner
+    };
+    const script=document.createElement('script');script.src='Build/WebGL.loader.js';
+    script.onerror=()=>showBanner('无法加载程序，请通过 HTTP 服务打开此目录，并检查 Build 文件夹是否完整。','error');
+    script.onload=()=>createUnityInstance(canvas,config,value=>{
+      document.getElementById('progress').value=value;
+      document.getElementById('progress-text').textContent='正在加载场景 '+Math.round(value*100)+'%';
+    }).then(instance=>{
+      document.getElementById('loading').style.display='none';state.textContent='键鼠控制已就绪';
+      const fullscreen=document.getElementById('fullscreen');fullscreen.disabled=false;
+      fullscreen.onclick=()=>{instance.SetFullscreen(1);canvas.focus();};canvas.focus();
+    }).catch(error=>showBanner(String(error),'error'));
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

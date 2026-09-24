@@ -1,0 +1,8 @@
+{
+  "upstream": "https://github.com/google/fonts/tree/main/ofl/notosanssc",
+  "license": "SIL Open Font License 1.1",
+  "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+  "outputSha256": "5e7e0623a1402b806a7351f4c57592d3425f490e79f2e16b8f3f8c535c808431",
+  "modification": "Static instance at weight 400; renamed Factory Workshop Sans; no glyph subsetting.",
+  "outputBytes": 10595948
+}
